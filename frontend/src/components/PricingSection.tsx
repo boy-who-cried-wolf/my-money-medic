@@ -81,19 +81,15 @@ const PricingSection: React.FC = () => {
         </div>
 
         {/* Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`group relative ${
-                plan.popular
-                  ? "md:-mt-8 md:mb-8"
-                  : ""
-              }`}
+              className="relative flex flex-col"
             >
               {/* Popular Badge */}
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
                   <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold">
                     Most Popular
                   </div>
@@ -101,9 +97,11 @@ const PricingSection: React.FC = () => {
               )}
 
               {/* Plan Card */}
-              <div className="relative bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-primary/50 transition-all duration-300 h-full">
+              <div className={`relative bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-primary/50 transition-all duration-300 flex-1 flex flex-col ${
+                plan.popular ? "border-primary/50" : ""
+              }`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
-                <div className="relative">
+                <div className="relative flex flex-col flex-1">
                   {/* Plan Header */}
                   <div className="mb-8">
                     <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
@@ -117,10 +115,10 @@ const PricingSection: React.FC = () => {
                   </div>
 
                   {/* Features List */}
-                  <ul className="space-y-4 mb-8">
+                  <ul className="space-y-4 mb-8 flex-1">
                     {plan.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-start">
-                        <svg className="w-5 h-5 text-primary mt-1 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-5 h-5 text-primary mt-1 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                         <span className="text-gray-300">{feature}</span>
@@ -130,7 +128,7 @@ const PricingSection: React.FC = () => {
 
                   {/* CTA Button */}
                   <button
-                    className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 ${
+                    className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 mt-auto ${
                       plan.popular
                         ? "bg-primary text-white hover:bg-primary/90"
                         : "bg-white/10 text-white hover:bg-white/20"
