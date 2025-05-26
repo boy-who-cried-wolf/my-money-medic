@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../assets/images/logo.png';
+import logo from '../../assets/images/logo.png';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,7 +32,10 @@ const Navbar: React.FC = () => {
   const navLinks = [
     { id: 'home', label: 'Home' },
     { id: 'pulsecheck', label: 'PulseCheck' },
-    { id: 'testimonials', label: 'Blog' },
+    { id: 'features', label: 'Features' },
+    { id: 'blog', label: 'Blog' },
+    { id: 'testimonials', label: 'Testimonials' },
+    { id: 'pricing', label: 'Pricing' },
     { id: 'about', label: 'About' },
   ];
 
@@ -61,18 +64,18 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4">
             {navLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => scrollToSection(link.id)}
-                className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors relative group"
+                className="text-gray-300 hover:text-white px-2 py-1.5 text-sm font-medium transition-colors relative group"
               >
                 {link.label}
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
               </button>
             ))}
-            <button className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary/25">
+            <button className="bg-primary hover:bg-primary/90 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary/25">
               Sign In
             </button>
           </div>
@@ -114,17 +117,17 @@ const Navbar: React.FC = () => {
       <div className={`md:hidden transition-all duration-300 ease-in-out ${
         isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
       } overflow-hidden bg-dark/95 backdrop-blur-md`}>
-        <div className="px-4 pt-2 pb-4 space-y-1">
+        <div className="px-3 pt-1 pb-2 space-y-0.5">
           {navLinks.map((link) => (
             <button
               key={link.id}
               onClick={() => scrollToSection(link.id)}
-              className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg text-base font-medium hover:bg-white/10 transition-colors"
+              className="w-full text-left text-gray-300 hover:text-white px-2 py-1.5 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors"
             >
               {link.label}
             </button>
           ))}
-          <button className="w-full bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-base font-medium transition-colors">
+          <button className="w-full bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
             Sign In
           </button>
         </div>

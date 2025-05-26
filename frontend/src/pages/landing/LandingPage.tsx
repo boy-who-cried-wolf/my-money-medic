@@ -1,12 +1,14 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import HeroSection from '../components/HeroSection';
-import FeaturesSection from '../components/FeaturesSection';
-import TestimonialsSection from '../components/TestimonialsSection';
-import PricingSection from '../components/PricingSection';
-import CTASection from '../components/CTASection';
-import Footer from '../components/Footer';
+import Navbar from '../../components/layout/Navbar';
+import HeroSection from '../../components/landing/HeroSection';
+import FeaturesSection from '../../components/landing/FeaturesSection';
+import TestimonialsSection from '../../components/landing/TestimonialsSection';
+import PricingSection from '../../components/landing/PricingSection';
+import CTASection from '../../components/landing/CTASection';
+import Footer from '../../components/layout/Footer';
 import { motion } from 'framer-motion';
+import BlogSection from '../../components/landing/BlogSection';
+import PulseCheckSection from '../../components/landing/PulseCheckSection';
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -22,7 +24,13 @@ const LandingPage: React.FC = () => {
           <HeroSection />
         </motion.section>
         <motion.section id="pulsecheck" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={sectionVariants}>
+          <PulseCheckSection />
+        </motion.section>
+        <motion.section id="features" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={sectionVariants}>
           <FeaturesSection />
+        </motion.section>
+        <motion.section id="blog" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={sectionVariants}>
+          <BlogSection />
         </motion.section>
         <motion.section id="testimonials" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={sectionVariants}>
           <TestimonialsSection />
