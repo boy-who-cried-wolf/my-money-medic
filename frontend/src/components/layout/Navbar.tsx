@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
 
 const Navbar: React.FC = () => {
@@ -47,8 +48,8 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <button 
-              onClick={() => scrollToSection('home')}
+            <Link 
+              to="/"
               className="flex items-center space-x-2 group focus:outline-none"
             >
               <img
@@ -60,7 +61,7 @@ const Navbar: React.FC = () => {
               <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 MyMoneyMedic
               </span>
-            </button>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -75,9 +76,12 @@ const Navbar: React.FC = () => {
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
               </button>
             ))}
-            <button className="bg-primary hover:bg-primary/90 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary/25">
+            <Link 
+              to="/signin"
+              className="bg-primary hover:bg-primary/90 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary/25"
+            >
               Sign In
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -127,9 +131,12 @@ const Navbar: React.FC = () => {
               {link.label}
             </button>
           ))}
-          <button className="w-full bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
+          <Link 
+            to="/signin"
+            className="w-full bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors block text-center"
+          >
             Sign In
-          </button>
+          </Link>
         </div>
       </div>
     </nav>
