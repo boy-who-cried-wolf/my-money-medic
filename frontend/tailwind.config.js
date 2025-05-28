@@ -7,7 +7,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#10b981',
+        primary: '#00B6FF',
+        'primary-dark': '#0076FF',
+        'primary-light': '#00D8FF',
         dark: {
           DEFAULT: '#111827',
           lighter: '#1F2937',
@@ -15,7 +17,7 @@ module.exports = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'hero-pattern': 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+        'hero-pattern': 'linear-gradient(135deg, #00D8FF 0%, #00B6FF 50%, #0076FF 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
