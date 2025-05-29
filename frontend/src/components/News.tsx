@@ -9,13 +9,7 @@ const newsItems = [
     category: 'Financial Education',
     date: 'March 15, 2024',
     readTime: '5 min read',
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-primary-500/20 to-primary-600/20 rounded-xl flex items-center justify-center">
-        <svg className="w-16 h-16 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-    ),
+    image: 'https://static.wixstatic.com/media/eaa99f_2bbb581667b742c49549f7e1eb8c2549~mv2.jpg/v1/fill/w_456,h_342,fp_0.50_0.50,q_90,enc_avif,quality_auto/eaa99f_2bbb581667b742c49549f7e1eb8c2549~mv2.webp',
   },
   {
     id: 2,
@@ -24,13 +18,7 @@ const newsItems = [
     category: 'Technology',
     date: 'March 12, 2024',
     readTime: '4 min read',
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-primary-500/20 to-primary-600/20 rounded-xl flex items-center justify-center">
-        <svg className="w-16 h-16 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      </div>
-    ),
+    image: 'https://static.wixstatic.com/media/eaa99f_2c856b8c619c49c48b0a18e4e6197cc3~mv2.jpg/v1/fill/w_457,h_342,fp_0.50_0.50,q_90,enc_avif,quality_auto/eaa99f_2c856b8c619c49c48b0a18e4e6197cc3~mv2.webp',
   },
   {
     id: 3,
@@ -39,13 +27,7 @@ const newsItems = [
     category: 'Savings',
     date: 'March 10, 2024',
     readTime: '6 min read',
-    image: (
-      <div className="w-full h-48 bg-gradient-to-br from-primary-500/20 to-primary-600/20 rounded-xl flex items-center justify-center">
-        <svg className="w-16 h-16 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-    ),
+    image: 'https://static.wixstatic.com/media/eaa99f_9e1a77114dc24035953d8207e0b01ada~mv2.jpg/v1/fill/w_456,h_342,fp_0.50_0.50,q_90,enc_avif,quality_auto/eaa99f_9e1a77114dc24035953d8207e0b01ada~mv2.webp',
   },
 ];
 
@@ -84,9 +66,15 @@ const News = () => {
               className="group relative"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-primary-600/10 rounded-2xl blur-xl group-hover:opacity-100 opacity-0 transition-opacity duration-500" />
-              <div className="relative bg-white dark:bg-dark-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
-                {item.image}
-                <div className="p-6">
+              <div className="relative bg-white dark:bg-dark-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-1 flex flex-col h-[600px]">
+                <div className="w-full h-[342px] relative flex-shrink-0">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6 flex flex-col flex-grow">
                   <div className="flex items-center gap-4 mb-4">
                     <span className="px-3 py-1 text-sm font-medium text-primary-500 bg-primary-500/10 rounded-full">
                       {item.category}
@@ -98,10 +86,10 @@ const News = () => {
                   <h3 className="text-xl font-semibold text-light-900 dark:text-dark-100 mb-3 group-hover:text-primary-500 transition-colors duration-300">
                     {item.title}
                   </h3>
-                  <p className="text-light-600 dark:text-dark-300 mb-4">
+                  <p className="text-light-600 dark:text-dark-300 mb-4 flex-grow">
                     {item.excerpt}
                   </p>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mt-auto">
                     <span className="text-sm text-light-500 dark:text-dark-400">
                       {item.readTime}
                     </span>
