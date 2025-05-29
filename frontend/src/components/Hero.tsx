@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { useCallback } from 'react';
 import Particles from 'react-tsparticles';
-import { loadFull } from 'tsparticles';
-import { loadSlim } from 'tsparticles-slim';
 import type { Engine } from 'tsparticles-engine';
+import { loadSlim } from 'tsparticles-slim';
 import { useNotification } from '../context/NotificationContext';
 
 const Hero = () => {
@@ -125,7 +124,7 @@ const Hero = () => {
               </button>
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -134,7 +133,7 @@ const Hero = () => {
           />
         </div>
       </div>
-      
+
       {/* Decorative elements with animation and fade edges */}
       <motion.div
         className="absolute top-0 right-0 w-64 h-64 bg-primary-500 rounded-full opacity-5 blur-xl -translate-y-1/2 translate-x-1/2"

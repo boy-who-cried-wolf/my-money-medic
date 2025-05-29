@@ -1,21 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from './context/ThemeContext';
-import { NotificationProvider } from './context/NotificationContext';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Benefits from './components/Benefits';
+import CallToAction from './components/CallToAction';
+import FAQ from './components/FAQ';
 import Features from './components/Features';
+import Footer from './components/Footer';
+import HealthScore from './components/HealthScore';
+import Hero from './components/Hero';
+import HowItWorks from './components/HowItWorks';
+import MetaTags from './components/MetaTags';
+import Navbar from './components/Navbar';
 import News from './components/News';
 import Newsletter from './components/Newsletter';
-import Footer from './components/Footer';
-import MetaTags from './components/MetaTags';
-import HowItWorks from './components/HowItWorks';
-import Benefits from './components/Benefits';
-import Testimonials from './components/Testimonials';
-import HealthScore from './components/HealthScore';
 import OpenBanking from './components/OpenBanking';
-import FAQ from './components/FAQ';
-import CallToAction from './components/CallToAction';
+import Testimonials from './components/Testimonials';
+import { NotificationProvider } from './context/NotificationContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 const App = () => {
   return (
