@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import Particles from 'react-tsparticles';
 import type { Engine } from 'tsparticles-engine';
 import { loadSlim } from 'tsparticles-slim';
@@ -12,8 +13,8 @@ const Hero = () => {
     await loadSlim(engine);
   }, []);
 
-  const handleButtonClick = (action: string) => {
-    showNotification(`The ${action} feature is coming soon! Stay tuned for updates.`);
+  const handleLearnMoreClick = () => {
+    showNotification('Learn more about our features coming soon!');
   };
 
   return (
@@ -110,14 +111,11 @@ const Hero = () => {
               Receive AI-powered suggestions, personalized tips, and a detailed health score. Connect your accounts securely with Open Banking for in-depth analysis, and get a tailored action plan to improve your financial well-being.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={() => handleButtonClick('Get Your FREE Pulse Check Now')}
-                className="btn-primary"
-              >
+              <Link to="/sign-up" className="btn-primary">
                 Get Your FREE Pulse Check Now
-              </button>
+              </Link>
               <button
-                onClick={() => handleButtonClick('Learn How It Works')}
+                onClick={handleLearnMoreClick}
                 className="btn-secondary"
               >
                 Learn How It Works

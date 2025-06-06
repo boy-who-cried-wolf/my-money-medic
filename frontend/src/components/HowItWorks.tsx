@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const steps = [
   {
@@ -97,7 +98,7 @@ const HowItWorks = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-16 text-center"
         >
-          <button className="btn-primary group relative overflow-hidden">
+          <Link to="/sign-up" className="btn-primary group relative overflow-hidden inline-block">
             <span className="relative z-10">Start Your Journey</span>
             <motion.div
               className="absolute inset-0 bg-primary-600"
@@ -105,7 +106,7 @@ const HowItWorks = () => {
               whileHover={{ x: 0 }}
               transition={{ duration: 0.3 }}
             />
-          </button>
+          </Link>
         </motion.div>
       </div>
     </section>

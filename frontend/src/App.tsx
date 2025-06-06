@@ -1,44 +1,48 @@
-import { BrowserRouter as Router } from 'react-router-dom';
-import Benefits from './components/Benefits';
-import CallToAction from './components/CallToAction';
-import FAQ from './components/FAQ';
-import Features from './components/Features';
-import Footer from './components/Footer';
-import HealthScore from './components/HealthScore';
-import Hero from './components/Hero';
-import HowItWorks from './components/HowItWorks';
-import MetaTags from './components/MetaTags';
-import Navbar from './components/Navbar';
-import News from './components/News';
-import Newsletter from './components/Newsletter';
-import OpenBanking from './components/OpenBanking';
-import Testimonials from './components/Testimonials';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LandingPage from './pages/landing';
+import SignIn from './pages/auth/SignIn';
+import SignUp from './pages/auth/SignUp';
 import { NotificationProvider } from './context/NotificationContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
+import Dashboard from './pages/dashboard/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+import OnboardingWizard from './pages/onboarding/OnboardingWizard';
 
 const App = () => {
   return (
     <ThemeProvider>
       <NotificationProvider>
         <Router>
-          <MetaTags />
-          <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-grow">
-              <Hero />
-              <HowItWorks />
-              <Benefits />
-              <Features />
-              <HealthScore />
-              <OpenBanking />
-              <Testimonials />
-              <FAQ />
-              <CallToAction />
-              <News />
-              <Newsletter />
-            </main>
-            <Footer />
-          </div>
+          <AuthProvider>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/sign-up" element={<SignUp />} />
+
+              {/* Protected routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/onboarding"
+                element={
+                  <ProtectedRoute>
+                    <OnboardingWizard />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Catch all route - redirect to home */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </AuthProvider>
         </Router>
       </NotificationProvider>
     </ThemeProvider>
