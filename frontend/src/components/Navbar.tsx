@@ -21,7 +21,11 @@ const Navbar = () => {
   ];
 
   const handleLinkClick = (name: string) => {
-    showNotification(`The ${name} feature is coming soon! Stay tuned for updates.`);
+    if (name === 'PulseCheck') {
+      navigate('/onboarding');
+    } else {
+      showNotification(`The ${name} feature is coming soon! Stay tuned for updates.`);
+    }
   };
 
   return (

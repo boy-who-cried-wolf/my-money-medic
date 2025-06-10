@@ -1,10 +1,9 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../../components/Footer';
 import MetaTags from '../../components/MetaTags';
 import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
-import { useAuthContext } from '../../context/AuthContext';
 import ProtectedRoute from '../../components/ProtectedRoute';
 
 // Define the types for our questions and answers
@@ -165,8 +164,8 @@ const questions: Question[] = [
 const OnboardingWizard = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
+  const [showBankModal, setShowBankModal] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthContext();
 
   const handleAnswer = (value: string | string[] | number) => {
     const newAnswers = [...answers];
@@ -190,15 +189,21 @@ const OnboardingWizard = () => {
     if (currentStep < questions.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Save answers and navigate to dashboard
-      // TODO: Implement API call to save answers
-      navigate('/dashboard');
+      setShowBankModal(true);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleBankConnection = (connect: boolean) => {
+    if (connect) {
+      navigate('/yodlee-connect');
+    } else {
+      navigate('/dashboard');
     }
   };
 
@@ -344,7 +349,7 @@ const OnboardingWizard = () => {
       <MetaTags />
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-light-50/50 to-light-100/50 dark:from-dark-900/50 dark:to-dark-800/50">
         <Navbar />
-        <main className="flex-grow container-custom py-12 px-4 sm:px-6 lg:px-8 mt-16">
+        <main className="flex-grow container-custom py-12 mt-16">
           <div className="max-w-3xl mx-auto">
             {/* Welcome Section */}
             <motion.div
@@ -442,6 +447,56 @@ const OnboardingWizard = () => {
           </div>
         </main>
         <Footer />
+
+        {/* Bank Connection Modal */}
+        <AnimatePresence>
+          {showBankModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white dark:bg-dark-800 rounded-2xl shadow-2xl max-w-md w-full p-8 relative"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary-500/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+
+                <div className="relative">
+                  <h2 className="text-2xl font-bold text-light-900 dark:text-dark-100 mb-4">
+                    Connect Your Bank Account
+                  </h2>
+                  <p className="text-light-600 dark:text-dark-300 mb-6">
+                    Would you like to connect your bank account to get personalized financial insights? We use Yodlee's secure API to protect your data.
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleBankConnection(true)}
+                      className="flex-1 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                    >
+                      Yes, Connect Bank
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleBankConnection(false)}
+                      className="flex-1 px-6 py-3 border border-light-300 dark:border-dark-600 rounded-xl text-light-700 dark:text-dark-300 hover:bg-light-50 dark:hover:bg-dark-700 transition-all duration-200"
+                    >
+                      Skip for Now
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </ProtectedRoute>
   );

@@ -1,12 +1,39 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Footer from '../../components/Footer';
 import MetaTags from '../../components/MetaTags';
 import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
-import { useAuthContext } from '../../context/AuthContext';
 import ProtectedRoute from '../../components/ProtectedRoute';
+import FinancialNav from '../../components/FinancialNav';
+import { Line, Doughnut, Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  BarElement,
+} from 'chart.js';
 
-// Mock data - replace with real data later
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
+
+// Mock data - replace with real data from API
 const metrics = [
   {
     title: 'Financial Health Score',
@@ -85,15 +112,56 @@ const recentTransactions = [
   },
 ];
 
-const Dashboard = () => {
-  const { isAuthenticated } = useAuthContext();
+// Chart data
+const financialHealthData = {
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  datasets: [
+    {
+      label: 'Financial Health Score',
+      data: [65, 68, 72, 70, 75, 78],
+      borderColor: 'rgb(99, 102, 241)',
+      backgroundColor: 'rgba(99, 102, 241, 0.1)',
+      tension: 0.4,
+      fill: true,
+    },
+  ],
+};
 
+const spendingByCategoryData = {
+  labels: ['Housing', 'Food', 'Transport', 'Entertainment', 'Utilities', 'Other'],
+  datasets: [
+    {
+      data: [35, 25, 15, 10, 10, 5],
+      backgroundColor: [
+        'rgba(99, 102, 241, 0.8)',
+        'rgba(16, 185, 129, 0.8)',
+        'rgba(245, 158, 11, 0.8)',
+        'rgba(239, 68, 68, 0.8)',
+        'rgba(139, 92, 246, 0.8)',
+        'rgba(107, 114, 128, 0.8)',
+      ],
+    },
+  ],
+};
+
+const savingsGoalsData = {
+  labels: ['Emergency Fund', 'House Deposit', 'Retirement', 'Vacation'],
+  datasets: [
+    {
+      label: 'Progress',
+      data: [75, 45, 30, 60],
+      backgroundColor: 'rgba(99, 102, 241, 0.8)',
+    },
+  ],
+};
+
+const Dashboard = () => {
   return (
     <ProtectedRoute>
       <MetaTags />
       <div className="min-h-screen flex flex-col bg-light-50 dark:bg-dark-900">
         <Navbar />
-        <main className="flex-grow container-custom py-8 px-4 sm:px-6 lg:px-8 mt-16">
+        <main className="flex-grow container-custom py-8 mt-16">
           {/* Welcome Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -108,6 +176,9 @@ const Dashboard = () => {
               Here's an overview of your financial health
             </p>
           </motion.div>
+
+          {/* Financial Navigation */}
+          <FinancialNav />
 
           {/* Metrics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -151,8 +222,25 @@ const Dashboard = () => {
               <h2 className="text-xl font-semibold text-light-900 dark:text-dark-100 mb-6">
                 Financial Health Overview
               </h2>
-              <div className="h-80 bg-light-100 dark:bg-dark-700 rounded-lg flex items-center justify-center">
-                <p className="text-light-600 dark:text-dark-300">Chart will be implemented here</p>
+              <div className="h-80">
+                <Line
+                  data={financialHealthData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        display: false,
+                      },
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        max: 100,
+                      },
+                    },
+                  }}
+                />
               </div>
             </motion.div>
 
@@ -197,6 +285,73 @@ const Dashboard = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </motion.div>
+
+            {/* Spending Analysis */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="bg-white dark:bg-dark-800 rounded-2xl shadow-lg p-6"
+            >
+              <h2 className="text-xl font-semibold text-light-900 dark:text-dark-100 mb-6">
+                Spending by Category
+              </h2>
+              <div className="h-80">
+                <Doughnut
+                  data={spendingByCategoryData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        position: 'bottom',
+                      },
+                    },
+                  }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Savings Goals */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
+              className="lg:col-span-2 bg-white dark:bg-dark-800 rounded-2xl shadow-lg p-6"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-light-900 dark:text-dark-100">
+                  Savings Goals Progress
+                </h2>
+                <Link to="/goals" className="text-sm font-medium text-primary-500 hover:text-primary-600">
+                  Manage Goals
+                </Link>
+              </div>
+              <div className="h-80">
+                <Bar
+                  data={savingsGoalsData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        display: false,
+                      },
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                          display: true,
+                          text: 'Progress (%)',
+                        },
+                      },
+                    },
+                  }}
+                />
               </div>
             </motion.div>
           </div>

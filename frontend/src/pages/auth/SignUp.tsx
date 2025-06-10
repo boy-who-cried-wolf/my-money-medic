@@ -231,7 +231,7 @@ const SignUp = () => {
           />
 
           {/* Sign Up Form */}
-          <div className="container-custom py-12 px-4 sm:px-6 lg:px-8 mt-16">
+          <div className="container-custom py-12 mt-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

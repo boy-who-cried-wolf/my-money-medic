@@ -34,7 +34,7 @@ const SignIn = () => {
       <MetaTags />
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-grow relative bg-gradient-to-br from-light-50/50 to-light-100/50 dark:from-dark-900/50 dark:to-dark-800/50 overflow-hidden">
+        <main className="flex-grow flex flex-col relative bg-gradient-to-br from-light-50/50 to-light-100/50 dark:from-dark-900/50 dark:to-dark-800/50 overflow-hidden">
           {/* Particles Background */}
           <div className="absolute inset-0 -z-10">
             <Particles
@@ -140,7 +140,7 @@ const SignIn = () => {
           />
 
           {/* Sign In Form */}
-          <div className="container-custom py-12 px-4 sm:px-6 lg:px-8 mt-16">
+          <div className="flex-grow flex flex-col container-custom py-12 mt-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

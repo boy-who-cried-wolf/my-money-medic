@@ -98,7 +98,7 @@ const HowItWorks = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-16 text-center"
         >
-          <Link to="/sign-up" className="btn-primary group relative overflow-hidden inline-block">
+          <Link to="/onboarding" className="btn-primary group relative overflow-hidden inline-block">
             <span className="relative z-10">Start Your Journey</span>
             <motion.div
               className="absolute inset-0 bg-primary-600"

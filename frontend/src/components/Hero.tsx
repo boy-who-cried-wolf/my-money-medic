@@ -111,7 +111,7 @@ const Hero = () => {
               Receive AI-powered suggestions, personalized tips, and a detailed health score. Connect your accounts securely with Open Banking for in-depth analysis, and get a tailored action plan to improve your financial well-being.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Link to="/sign-up" className="btn-primary">
+              <Link to="/onboarding" className="btn-primary">
                 Get Your FREE Pulse Check Now
               </Link>
               <button
