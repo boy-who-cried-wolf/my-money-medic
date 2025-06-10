@@ -1,5 +1,4 @@
 import Benefits from '../../components/Benefits';
-import CallToAction from '../../components/CallToAction';
 import FAQ from '../../components/FAQ';
 import Features from '../../components/Features';
 import Footer from '../../components/Footer';
@@ -28,7 +27,6 @@ const LandingPage = () => {
           <OpenBanking />
           <Testimonials />
           <FAQ />
-          <CallToAction />
           <News />
           <Newsletter />
         </main>
