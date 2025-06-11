@@ -5,7 +5,6 @@ import MetaTags from '../../components/MetaTags';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import ProtectedRoute from '../../components/ProtectedRoute';
-import FinancialNav from '../../components/FinancialNav';
 import { Line } from 'react-chartjs-2';
 
 // Mock data - replace with real data from API
@@ -111,9 +110,6 @@ const FinancialInsights = () => {
               Personalized recommendations and insights
             </p>
           </motion.div>
-
-          {/* Financial Navigation */}
-          <FinancialNav />
 
           {/* Financial Health Score */}
           <motion.div

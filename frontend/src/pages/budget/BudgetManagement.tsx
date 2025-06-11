@@ -5,7 +5,6 @@ import MetaTags from '../../components/MetaTags';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import ProtectedRoute from '../../components/ProtectedRoute';
-import FinancialNav from '../../components/FinancialNav';
 import { Bar, Doughnut } from 'react-chartjs-2';
 
 // Mock data - replace with real data from API
@@ -163,9 +162,6 @@ const BudgetManagement = () => {
               </motion.button>
             </div>
           </motion.div>
-
-          {/* Financial Navigation */}
-          <FinancialNav />
 
           {/* Month Selector */}
           <div className="mb-8">

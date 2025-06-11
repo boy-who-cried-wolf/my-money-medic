@@ -19,16 +19,36 @@ const LandingPage = () => {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-grow">
-          <Hero />
-          <HowItWorks />
-          <Benefits />
-          <Features />
-          <HealthScore />
-          <OpenBanking />
-          <Testimonials />
-          <FAQ />
-          <News />
-          <Newsletter />
+          <section id="hero">
+            <Hero />
+          </section>
+          <section id="how-it-works">
+            <HowItWorks />
+          </section>
+          <section id="benefits">
+            <Benefits />
+          </section>
+          <section id="features">
+            <Features />
+          </section>
+          <section id="health-score">
+            <HealthScore />
+          </section>
+          <section id="open-banking">
+            <OpenBanking />
+          </section>
+          <section id="testimonials">
+            <Testimonials />
+          </section>
+          <section id="faq">
+            <FAQ />
+          </section>
+          <section id="news">
+            <News />
+          </section>
+          <section id="newsletter">
+            <Newsletter />
+          </section>
         </main>
         <Footer />
       </div>

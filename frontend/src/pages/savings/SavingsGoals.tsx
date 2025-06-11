@@ -5,7 +5,6 @@ import MetaTags from '../../components/MetaTags';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import ProtectedRoute from '../../components/ProtectedRoute';
-import FinancialNav from '../../components/FinancialNav';
 import { Bar } from 'react-chartjs-2';
 
 // Mock data - replace with real data from API
@@ -90,7 +89,7 @@ const SavingsGoals = () => {
   return (
     <ProtectedRoute>
       <MetaTags />
-      <div className="min-h-screen flex flex-col items-stretch bg-light-50 dark:bg-dark-900">
+      <div className="min-h-screen flex flex-col bg-light-50 dark:bg-dark-900">
         <Navbar />
         <main className="flex-grow container-custom py-8 mt-16">
           {/* Header */}
@@ -119,9 +118,6 @@ const SavingsGoals = () => {
               </motion.button>
             </div>
           </motion.div>
-
-          {/* Financial Navigation */}
-          <FinancialNav />
 
           {/* Goals Overview */}
           <motion.div

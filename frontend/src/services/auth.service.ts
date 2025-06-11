@@ -1,4 +1,5 @@
 import ApiService from './api.service';
+import { User } from '../context/AuthContext';
 
 interface LoginResponse {
   access_token: string;
@@ -32,6 +33,7 @@ interface RegisterData {
 class AuthService {
   private static instance: AuthService;
   private apiService: ApiService;
+  private user: User | null = null;
 
   private constructor() {
     this.apiService = ApiService.getInstance();
@@ -44,21 +46,39 @@ class AuthService {
     return AuthService.instance;
   }
 
-  public async login(data: LoginData): Promise<LoginResponse> {
-    const response = await this.apiService.post<LoginResponse>('/auth/login', data);
-    if (response.access_token) {
-      localStorage.setItem('token', response.access_token);
-    }
-    return response;
+  public getUser(): User | null {
+    return this.user;
   }
 
-  public async register(data: RegisterData): Promise<RegisterResponse> {
-    return await this.apiService.post<RegisterResponse>('/auth/register', data);
+  public async login(email: string, password: string): Promise<void> {
+    // TODO: Implement actual login logic
+    this.user = {
+      id: '1',
+      email,
+      firstName: 'John',
+      lastName: 'Doe'
+    };
+  }
+
+  public async register(data: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
+  }): Promise<void> {
+    // TODO: Implement actual registration logic
+    this.user = {
+      id: '1',
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone
+    };
   }
 
   public logout(): void {
-    localStorage.removeItem('token');
-    window.location.href = '/sign-in';
+    this.user = null;
   }
 
   public isAuthenticated(): boolean {

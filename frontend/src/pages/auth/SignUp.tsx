@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Particles from 'react-tsparticles';
 import type { Engine } from 'tsparticles-engine';
@@ -9,27 +9,37 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useAuthContext } from '../../context/AuthContext';
 
+interface FormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+}
+
 interface FormErrors {
-  firstName?: string;
-  lastName?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
+  firstName?: string;
+  lastName?: string;
   phone?: string;
 }
 
 const SignUp = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
+    firstName: '',
+    lastName: '',
+    phone: ''
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const { register, isLoading, error: authError } = useAuthContext();
+  const navigate = useNavigate();
 
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadSlim(engine);
@@ -37,87 +47,65 @@ const SignUp = () => {
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
-    
-    // First name validation
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
 
-    // Last name validation
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
+    if (!formData.email) {
       newErrors.email = 'Email is required';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
     }
 
-    // Password validation
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (!passwordRegex.test(formData.password)) {
-      newErrors.password = 'Password must be at least 8 characters long and include uppercase, lowercase, number and special character';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
     }
 
-    // Confirm password validation
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
-    // Phone validation
-    const phoneRegex = /^\+?[\d\s-]{10,}$/;
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!phoneRegex.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
+    if (!formData.firstName) {
+      newErrors.firstName = 'First name is required';
+    }
+
+    if (!formData.lastName) {
+      newErrors.lastName = 'Last name is required';
+    }
+
+    if (formData.phone && !/^\+?[\d\s-]{10,}$/.test(formData.phone)) {
+      newErrors.phone = 'Phone number is invalid';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
-    if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: undefined
-      }));
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      await register({
-        email: formData.email,
-        password: formData.password,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone,
-      });
+      try {
+        await register({
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone || undefined
+        });
+        navigate('/onboarding');
+      } catch (error) {
+        // Error is already handled by the AuthContext
+      }
     }
-  };
-
-  const renderError = (error?: string) => {
-    if (!error) return null;
-    return (
-      <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-        {error}
-      </p>
-    );
   };
 
   return (
@@ -125,7 +113,7 @@ const SignUp = () => {
       <MetaTags />
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-grow relative bg-gradient-to-br from-light-50/50 to-light-100/50 dark:from-dark-900/50 dark:to-dark-800/50 overflow-hidden">
+        <main className="flex-grow flex flex-col relative bg-gradient-to-br from-light-50/50 to-light-100/50 dark:from-dark-900/50 dark:to-dark-800/50 overflow-hidden">
           {/* Particles Background */}
           <div className="absolute inset-0 -z-10">
             <Particles
@@ -231,7 +219,7 @@ const SignUp = () => {
           />
 
           {/* Sign Up Form */}
-          <div className="container-custom py-12 mt-16">
+          <div className="flex-grow flex flex-col container-custom py-12 mt-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -267,16 +255,18 @@ const SignUp = () => {
                         id="firstName"
                         name="firstName"
                         type="text"
+                        autoComplete="given-name"
                         required
-                        className={`appearance-none relative block w-full px-3 py-2 border ${
-                          errors.firstName ? 'border-red-500' : 'border-light-300 dark:border-dark-600'
-                        } placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700`}
+                        className="appearance-none relative block w-full px-3 py-2 border border-light-300 dark:border-dark-600 placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700"
                         placeholder="First name"
                         value={formData.firstName}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                       />
-                      {renderError(errors.firstName)}
+                      {errors.firstName && (
+                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.firstName}</p>
+                      )}
                     </div>
+
                     <div>
                       <label htmlFor="lastName" className="block text-sm font-medium text-light-700 dark:text-dark-300 mb-1">
                         Last name
@@ -285,55 +275,56 @@ const SignUp = () => {
                         id="lastName"
                         name="lastName"
                         type="text"
+                        autoComplete="family-name"
                         required
-                        className={`appearance-none relative block w-full px-3 py-2 border ${
-                          errors.lastName ? 'border-red-500' : 'border-light-300 dark:border-dark-600'
-                        } placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700`}
+                        className="appearance-none relative block w-full px-3 py-2 border border-light-300 dark:border-dark-600 placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700"
                         placeholder="Last name"
                         value={formData.lastName}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                       />
-                      {renderError(errors.lastName)}
+                      {errors.lastName && (
+                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.lastName}</p>
+                      )}
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="email-address" className="block text-sm font-medium text-light-700 dark:text-dark-300 mb-1">
+                    <label htmlFor="email" className="block text-sm font-medium text-light-700 dark:text-dark-300 mb-1">
                       Email address
                     </label>
                     <input
-                      id="email-address"
+                      id="email"
                       name="email"
                       type="email"
                       autoComplete="email"
                       required
-                      className={`appearance-none relative block w-full px-3 py-2 border ${
-                        errors.email ? 'border-red-500' : 'border-light-300 dark:border-dark-600'
-                      } placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700`}
+                      className="appearance-none relative block w-full px-3 py-2 border border-light-300 dark:border-dark-600 placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700"
                       placeholder="Email address"
                       value={formData.email}
-                      onChange={handleChange}
+                      onChange={handleInputChange}
                     />
-                    {renderError(errors.email)}
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>
+                    )}
                   </div>
 
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-light-700 dark:text-dark-300 mb-1">
-                      Phone number
+                      Phone number (optional)
                     </label>
                     <input
                       id="phone"
                       name="phone"
                       type="tel"
-                      required
-                      className={`appearance-none relative block w-full px-3 py-2 border ${
-                        errors.phone ? 'border-red-500' : 'border-light-300 dark:border-dark-600'
-                      } placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700`}
+                      autoComplete="tel"
+                      className="appearance-none relative block w-full px-3 py-2 border border-light-300 dark:border-dark-600 placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700"
                       placeholder="Phone number"
                       value={formData.phone}
-                      onChange={handleChange}
+                      onChange={handleInputChange}
                     />
-                    {renderError(errors.phone)}
+                    {errors.phone && (
+                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.phone}</p>
+                    )}
                   </div>
 
                   <div>
@@ -346,14 +337,14 @@ const SignUp = () => {
                       type="password"
                       autoComplete="new-password"
                       required
-                      className={`appearance-none relative block w-full px-3 py-2 border ${
-                        errors.password ? 'border-red-500' : 'border-light-300 dark:border-dark-600'
-                      } placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700`}
+                      className="appearance-none relative block w-full px-3 py-2 border border-light-300 dark:border-dark-600 placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700"
                       placeholder="Password"
                       value={formData.password}
-                      onChange={handleChange}
+                      onChange={handleInputChange}
                     />
-                    {renderError(errors.password)}
+                    {errors.password && (
+                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.password}</p>
+                    )}
                   </div>
 
                   <div>
@@ -366,14 +357,14 @@ const SignUp = () => {
                       type="password"
                       autoComplete="new-password"
                       required
-                      className={`appearance-none relative block w-full px-3 py-2 border ${
-                        errors.confirmPassword ? 'border-red-500' : 'border-light-300 dark:border-dark-600'
-                      } placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700`}
+                      className="appearance-none relative block w-full px-3 py-2 border border-light-300 dark:border-dark-600 placeholder-light-500 dark:placeholder-dark-400 text-light-900 dark:text-dark-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-dark-700"
                       placeholder="Confirm password"
                       value={formData.confirmPassword}
-                      onChange={handleChange}
+                      onChange={handleInputChange}
                     />
-                    {renderError(errors.confirmPassword)}
+                    {errors.confirmPassword && (
+                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.confirmPassword}</p>
+                    )}
                   </div>
 
                   <div>

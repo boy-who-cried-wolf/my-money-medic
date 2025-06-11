@@ -14,6 +14,7 @@ import SavingsGoals from './pages/savings/SavingsGoals';
 import InvestmentPortfolio from './pages/investments/InvestmentPortfolio';
 import BudgetManagement from './pages/budget/BudgetManagement';
 import FinancialInsights from './pages/insights/FinancialInsights';
+import Recommendations from './pages/recommendations/Recommendations';
 
 const App = () => {
   return (
@@ -89,6 +90,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <FinancialInsights />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/recommendations"
+                element={
+                  <ProtectedRoute>
+                    <Recommendations />
                   </ProtectedRoute>
                 }
               />

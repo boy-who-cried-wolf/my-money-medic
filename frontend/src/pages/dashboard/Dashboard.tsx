@@ -5,7 +5,6 @@ import Footer from '../../components/Footer';
 import MetaTags from '../../components/MetaTags';
 import Navbar from '../../components/Navbar';
 import ProtectedRoute from '../../components/ProtectedRoute';
-import FinancialNav from '../../components/FinancialNav';
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -176,9 +175,6 @@ const Dashboard = () => {
               Here's an overview of your financial health
             </p>
           </motion.div>
-
-          {/* Financial Navigation */}
-          <FinancialNav />
 
           {/* Metrics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
