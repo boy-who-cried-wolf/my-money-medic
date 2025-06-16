@@ -1,17 +1,26 @@
-from fastapi import FastAPI, Depends, Request, status
+from fastapi import FastAPI, Depends, Request, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from app.core.security import verify_token
 from app.database import init_db
 from app.database.connection import test_connection
 from contextlib import asynccontextmanager
 import logging
 import os
+from pathlib import Path
 
+# Configure logging with more detailed format
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.DEBUG,  # Changed to DEBUG level
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s - [%(filename)s:%(lineno)d]",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
+
+# Set specific loggers to DEBUG
+logging.getLogger("app.api.v1.endpoints.captcha").setLevel(logging.DEBUG)
+logging.getLogger("httpx").setLevel(logging.DEBUG)
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +61,22 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Static files configuration
+static_dir = Path("static")
+admin_static_dir = Path("static/admin")
+
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+    logger.info("✅ Static files mounted at /static")
+else:
+    logger.warning("⚠️ Static directory not found, frontend files not served")
+
+if admin_static_dir.exists():
+    app.mount("/admin", StaticFiles(directory="static/admin"), name="admin")
+    logger.info("✅ Admin static files mounted at /admin")
+else:
+    logger.warning("⚠️ Admin static directory not found, admin files not served")
+
 # CORS configuration - Updated for production
 origins = [
     "http://localhost:3000",  # React's default port
@@ -78,13 +103,13 @@ app.add_middleware(
 
 
 # Root endpoint
-@app.get("/")
-async def root():
-    return {
-        "message": "Welcome to Broker Matching Platform API",
-        "docs_url": "/api/docs",
-        "version": "1.0.0",
-    }
+# @app.get("/")
+# async def root():
+#     return {
+#         "message": "Welcome to Broker Matching Platform API",
+#         "docs_url": "/api/docs",
+#         "version": "1.0.0",
+#     }
 
 
 # Public test endpoint for quizzes - no auth required
@@ -198,12 +223,27 @@ async def health_check():
 # Include API router
 try:
     from app.api import api_router
-
+    
+    # Mount the main API router
     app.include_router(api_router, prefix="/api")
     logger.info("✅ API router loaded successfully")
+    
+    # Debug: Print all registered routes
+    logger.info("Registered routes:")
+    for route in app.routes:
+        if hasattr(route, "methods"):
+            logger.info(f"  {route.methods} {route.path}")
+        else:
+            logger.info(f"  MOUNT {route.path}")
+        
+except ImportError as e:
+    logger.error(f"Failed to import API router: {str(e)}")
+    logger.error("Please check that all required modules are installed and paths are correct")
+    raise
 except Exception as e:
     logger.error(f"Error including API router: {str(e)}")
-    logger.info("Application will continue with basic endpoints only")
+    logger.error("Stack trace:", exc_info=True)
+    raise
 
 
 # Test endpoint
@@ -222,8 +262,61 @@ async def generic_exception_handler(_, exc: Exception):
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
+    logger.debug(f"Request: {request.method} {request.url.path}")
+    logger.debug(f"Headers: {dict(request.headers)}")
+    
+    # Log request body for POST requests
+    if request.method == "POST":
+        try:
+            body = await request.body()
+            if body:
+                logger.debug(f"Request body: {body.decode()}")
+        except Exception as e:
+            logger.error(f"Error reading request body: {str(e)}")
+    
     response = await call_next(request)
+    
+    logger.debug(f"Response status: {response.status_code}")
     return response
+
+
+# Catch-all route for React SPA routing - must be last
+@app.get("/{full_path:path}")
+async def serve_react_app(full_path: str):
+    # If the path starts with /api, let it pass through to the API routes
+    if full_path.startswith("api/"):
+        raise HTTPException(status_code=404, detail="API endpoint not found")
+    
+    # Handle admin routes first
+    # if full_path.startswith("admin/"):
+    #     admin_path = full_path[6:]  # Remove 'admin/' prefix
+    #     admin_file = admin_static_dir / admin_path
+    #     if admin_file.exists() and admin_file.is_file():
+    #         return FileResponse(admin_file)
+    #     # If file not found, serve admin index.html for client-side routing
+    #     admin_index = admin_static_dir / "index.html"
+    #     if admin_index.exists():
+    #         return FileResponse(admin_index)
+    #     raise HTTPException(status_code=404, detail="Admin page not found")
+    
+    # Handle root admin path
+    if full_path.startswith("admin"):
+        admin_index = admin_static_dir / "index.html"
+        if admin_index.exists():
+            return FileResponse(admin_index)
+        raise HTTPException(status_code=404, detail="Admin page not found")
+    
+    # Try to serve the requested file from static directory
+    static_file = static_dir / full_path
+    if static_file.exists() and static_file.is_file():
+        return FileResponse(static_file)
+    
+    # If file not found, serve index.html for client-side routing
+    index_file = static_dir / "index.html"
+    if index_file.exists():
+        return FileResponse(index_file)
+    
+    raise HTTPException(status_code=404, detail="Not found")
 
 
 # Main entry point for running the server
