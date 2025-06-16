@@ -66,7 +66,7 @@ static_dir = Path("static")
 admin_static_dir = Path("static/admin")
 
 if static_dir.exists():
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+    app.mount("/static", StaticFiles(directory="static/static"), name="static")
     logger.info("✅ Static files mounted at /static")
 else:
     logger.warning("⚠️ Static directory not found, frontend files not served")
