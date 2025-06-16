@@ -158,7 +158,7 @@ const Users: React.FC = () => {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="hover:shadow-lg transition-shadow duration-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3">
             <CardTitle className="text-xs font-medium text-muted-foreground">Total Users</CardTitle>
@@ -168,33 +168,7 @@ const Users: React.FC = () => {
           </CardHeader>
           <CardContent className="p-3 pt-0">
             <div className="text-xl font-bold">{users.length}</div>
-            <div className="text-xs text-muted-foreground mt-0.5">Active accounts in the system</div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow duration-200">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3">
-            <CardTitle className="text-xs font-medium text-muted-foreground">Active Users</CardTitle>
-            <div className="p-1.5 rounded-full bg-green-50">
-              <UsersIcon className="h-3.5 w-3.5 text-green-600" />
-            </div>
-          </CardHeader>
-          <CardContent className="p-3 pt-0">
-            <div className="text-xl font-bold">{users.filter(u => u.is_active).length}</div>
-            <div className="text-xs text-muted-foreground mt-0.5">Currently active accounts</div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow duration-200">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3">
-            <CardTitle className="text-xs font-medium text-muted-foreground">Brokers</CardTitle>
-            <div className="p-1.5 rounded-full bg-blue-50">
-              <UsersIcon className="h-3.5 w-3.5 text-blue-600" />
-            </div>
-          </CardHeader>
-          <CardContent className="p-3 pt-0">
-            <div className="text-xl font-bold">{users.filter(u => u.user_type === 'broker').length}</div>
-            <div className="text-xs text-muted-foreground mt-0.5">Registered brokers</div>
+            <div className="text-xs text-muted-foreground mt-0.5">Registered users</div>
           </CardContent>
         </Card>
       </div>

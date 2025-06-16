@@ -28,7 +28,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Users', href: '/users', icon: Users },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Brokers', href: '/brokers', icon: Shield },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 

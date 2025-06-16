@@ -27,9 +27,12 @@ const App: React.FC = () => {
           {/* Protected routes */}
           <Route element={<ProtectedLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/users" element={<Users />} />
+            <Route path="/users/*" element={<Users />} />
             <Route path="/analytics" element={<Analytics />} />
+            {/* Temporarily disabled broker routes
             <Route path="/brokers" element={<Brokers />} />
+            <Route path="/brokers/new" element={<BrokerForm />} />
+            */}
             <Route path="/settings" element={<Settings />} />
           </Route>
 

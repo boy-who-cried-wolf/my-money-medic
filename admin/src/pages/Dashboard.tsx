@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* System Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <Card className="hover:shadow-lg transition-shadow duration-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3">
             <CardTitle className="text-xs font-medium text-muted-foreground">Active Users</CardTitle>
@@ -87,22 +87,6 @@ const Dashboard: React.FC = () => {
             <div className="flex items-center text-xs text-green-600 mt-0.5">
               <ArrowUpRight className="h-3 w-3 mr-0.5" />
               <span>12% from last month</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow duration-200">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3">
-            <CardTitle className="text-xs font-medium text-muted-foreground">Total Brokers</CardTitle>
-            <div className="p-1.5 rounded-full bg-primary-50">
-              <Shield className="h-3.5 w-3.5 text-primary-600" />
-            </div>
-          </CardHeader>
-          <CardContent className="p-3 pt-0">
-            <div className="text-xl font-bold">{metrics?.totalBrokers.toLocaleString()}</div>
-            <div className="flex items-center text-xs text-green-600 mt-0.5">
-              <ArrowUpRight className="h-3 w-3 mr-0.5" />
-              <span>8% from last month</span>
             </div>
           </CardContent>
         </Card>
